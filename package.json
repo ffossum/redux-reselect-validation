@@ -1,0 +1,44 @@
+{
+  "name": "redux-input-validation",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/redux-input-validation.cjs.js",
+  "module": "dist/redux-input-validation.esm.js",
+  "browser": "dist/redux-input-validation.umd.js",
+  "dependencies": {},
+  "devDependencies": {
+    "ajv": "^5.2.2",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "eslint": "^4.7.0",
+    "eslint-plugin-flowtype": "^2.35.1",
+    "flow-bin": "^0.54.1",
+    "jest": "^21.1.0",
+    "prettier": "^1.7.0",
+    "reselect": "^3.0.1",
+    "rollup": "^0.50.0",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-node-resolve": "^3.0.0"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "flow check && yarn eslint && yarn prettycheck",
+    "pretest": "yarn build",
+    "prettier": "prettier --single-quote --trailing-comma es5 \"src/**/*.js\"",
+    "prettyfix": "yarn prettier --write",
+    "prettycheck": "yarn prettier --list-different",
+    "eslint": "eslint src/",
+    "coverage": "jest --coverage --collectCoverageFrom=\"src/**/*.js\""
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "reselect": "^3.0.1"
+  }
+}
