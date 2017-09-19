@@ -3,7 +3,7 @@ export type Action = ChangeValueAction;
 
 export const CHANGE_VALUE = 'forms/change value';
 
-type ChangeValueAction = {
+export type ChangeValueAction = {
   type: typeof CHANGE_VALUE,
   payload: ValueChange,
 };

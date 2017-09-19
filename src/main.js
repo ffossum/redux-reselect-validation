@@ -2,6 +2,7 @@
 import type { FormsState } from './reducer';
 import reducer from './reducer';
 import { changeValue, CHANGE_VALUE } from './actions';
+import type { ChangeValueAction } from './actions';
 import { createSelector } from 'reselect';
 import { mapValues, values, every } from 'lodash';
 
@@ -9,14 +10,23 @@ type State = {
   forms: FormsState,
 };
 
-type Params = {
+type Params<Value> = {
   formName: string,
   name: string,
   validators?: {
-    [key: string]: Array<*> | Function,
+    [key: string]: Array<Function> | Value => boolean,
   },
 };
-function input(params: Params) {
+
+type Result<Value> = {
+  changeValue: Value => ChangeValueAction,
+  formName: string,
+  name: string,
+  getErrors: State => { [string]: boolean },
+  getValue: State => Value,
+  isValid: State => boolean,
+}
+function input<Value>(params: Params<Value>): Result<Value> {
   const { formName, name, validators = {} } = params;
 
   function getValue(state: State) {
@@ -42,7 +52,7 @@ function input(params: Params) {
   );
 
   return {
-    changeValue(value: any) {
+    changeValue(value: Value) {
       return changeValue({
         formName,
         name,
