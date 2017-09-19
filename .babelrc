@@ -1,6 +1,7 @@
 {
   "env": {
     "test": {
+      "plugins": [ "lodash" ],
       "presets": [
         "env",
         "flow",
@@ -8,6 +9,7 @@
       ]
     },
     "development": {
+      "plugins": [ "lodash" ],
       "presets": [
         ["env", { "modules": false }],
         "flow",
