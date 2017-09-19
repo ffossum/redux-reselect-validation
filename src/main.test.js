@@ -3,7 +3,6 @@
 
 import { input } from './main';
 import formsReducer from './reducer';
-import { changeValue } from './actions';
 import { combineReducers } from 'redux';
 
 describe('input', () => {
@@ -28,7 +27,7 @@ describe('input', () => {
 
   it('provides selector for input value', () => {
     const result = input({ name, formName });
-    state = reducer(state, changeValue({ formName, name, value: 'abc' }));
+    state = reducer(state, result.changeValue('abc'));
     expect(result.getValue(state)).toBe('abc');
   });
 
@@ -41,7 +40,7 @@ describe('input', () => {
       },
     });
     expect(result.isValid(state)).toBe(false);
-    state = reducer(state, changeValue({ formName, name, value: 'abc' }));
+    state = reducer(state, result.changeValue('abc'));
     expect(result.isValid(state)).toBe(true);
   });
 
@@ -58,21 +57,12 @@ describe('input', () => {
       },
     });
 
-    state = reducer(
-      state,
-      changeValue({ formName: input1.formName, name: input1.name, value: 1 })
-    );
-    state = reducer(
-      state,
-      changeValue({ formName: input2.formName, name: input2.name, value: 2 })
-    );
+    state = reducer(state, input1.changeValue(1));
+    state = reducer(state, input2.changeValue(2));
 
     expect(input2.isValid(state)).toBe(true);
 
-    state = reducer(
-      state,
-      changeValue({ formName: input1.formName, name: input1.name, value: 3 })
-    );
+    state = reducer(state, input1.changeValue(3));
 
     expect(input2.isValid(state)).toBe(false);
   });

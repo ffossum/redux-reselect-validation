@@ -16,7 +16,7 @@ type Params = {
     [key: string]: Array<*> | Function,
   },
 };
-export function input(params: Params) {
+function input(params: Params) {
   const { formName, name, validators = {} } = params;
 
   function getValue(state: State) {
@@ -42,6 +42,13 @@ export function input(params: Params) {
   );
 
   return {
+    changeValue(value: any) {
+      return changeValue({
+        formName,
+        name,
+        value,
+      });
+    },
     formName,
     name,
     getErrors,
@@ -50,4 +57,4 @@ export function input(params: Params) {
   };
 }
 
-export { reducer, changeValue, CHANGE_VALUE };
+export { input, reducer, changeValue, CHANGE_VALUE };
