@@ -34,8 +34,8 @@
     "test": "flow check && yarn eslint && yarn prettycheck && yarn coverage",
     "pretest": "yarn build",
     "prettier": "prettier --single-quote --trailing-comma es5 \"src/**/*.js\"",
-    "prettyfix": "yarn prettier --write",
-    "prettycheck": "yarn prettier --list-different",
+    "prettyfix": "yarn prettier -- --write",
+    "prettycheck": "yarn prettier -- --list-different",
     "eslint": "eslint src/",
     "coverage": "jest --coverage --collectCoverageFrom=\"src/**/*.js\""
   },
