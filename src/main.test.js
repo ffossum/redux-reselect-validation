@@ -4,6 +4,7 @@
 import { input } from './main';
 import formsReducer from './reducer';
 import { combineReducers } from 'redux';
+import { createSelector } from 'reselect';
 
 describe('input', () => {
   let reducer;
@@ -49,11 +50,18 @@ describe('input', () => {
       name: 'input1',
       formName,
     });
-    const input2 = input({
+    let input2 = input({
       name: 'input2',
       formName,
-      validators: {
-        largest: [input1.getValue, (value, input1Value) => value > input1Value],
+    });
+
+    input2 = input2.next({
+      reduxValidators: {
+        largest: createSelector(
+          input2.getValue,
+          input1.getValue,
+          (value, input1Value) => value > input1Value
+        ),
       },
     });
 
