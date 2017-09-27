@@ -17,6 +17,7 @@ type State = {
 type Params<Value> = {
   formName: string,
   name: string,
+  defaultValue?: Value,
   validators?: {
     [key: string]: (Value) => boolean,
   },
@@ -32,17 +33,18 @@ type Result<Value> = {
   formName: string,
   name: string,
   getErrors: State => { [string]: boolean },
-  getValue: State => Value,
+  getValue: State => ?Value,
   isValid: State => boolean,
   next: (Params2<Value>) => Result<Value>,
 };
 function input<Value>(params: Params<Value>): Result<Value> {
-  const { formName, name, validators = {} } = params;
+  const { formName, name, defaultValue, validators = {} } = params;
 
   function getValue(state: State) {
     const form = state.forms[formName];
     const input = form && form.inputs && form.inputs[params.name];
-    return input && input.value;
+    const value = input && input.value;
+    return typeof value !== 'undefined' ? value : defaultValue;
   }
 
   let validationSelectors = mapValues(validators, v => {

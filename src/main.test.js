@@ -32,6 +32,11 @@ describe('input', () => {
     expect(result.getValue(state)).toBe('abc');
   });
 
+  test('default value', () => {
+    const result = input({ name, formName, defaultValue: 'default value' });
+    expect(result.getValue(state)).toBe('default value');
+  });
+
   test('simple validator', () => {
     const result = input({
       name,
