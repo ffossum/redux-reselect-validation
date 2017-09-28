@@ -1,10 +1,10 @@
 {
-  "name": "redux-input-validation",
+  "name": "redux-reselect-validation",
   "version": "0.1.0",
   "license": "MIT",
-  "main": "dist/redux-input-validation.cjs.js",
-  "module": "dist/redux-input-validation.esm.js",
-  "browser": "dist/redux-input-validation.umd.js",
+  "main": "dist/redux-reselect-validation.cjs.js",
+  "module": "dist/redux-reselect-validation.esm.js",
+  "browser": "dist/redux-reselect-validation.umd.js",
   "dependencies": {
     "lodash": "^4.17.4"
   },
