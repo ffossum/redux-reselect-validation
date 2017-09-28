@@ -18,12 +18,20 @@ describe('input', () => {
     state = reducer(undefined, initAction);
   });
 
-  it('provides its name', () => {
+  it('includes its name', () => {
     const result = input({
       formName,
       name,
     });
     expect(result.name).toBe(name);
+  });
+
+  it('includes its form name', () => {
+    const result = input({
+      formName,
+      name,
+    });
+    expect(result.formName).toBe(formName);
   });
 
   it('provides selector for input value', () => {

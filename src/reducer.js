@@ -18,11 +18,17 @@ type InputState = {
 export default function formsReducer(state: FormsState = {}, action: Action) {
   switch (action.type) {
     case CHANGE_VALUE: {
-      const { formName } = action.payload;
-      return {
-        ...state,
-        [formName]: formReducer(state[formName], action),
-      };
+      const { formName, name } = action.payload;
+      const form = state[formName];
+      const input = form && form.inputs[name];
+      const value = input && input.value;
+
+      if (value !== action.payload.value) {
+        return {
+          ...state,
+          [formName]: formReducer(state[formName], action),
+        };
+      }
     }
   }
   return state;

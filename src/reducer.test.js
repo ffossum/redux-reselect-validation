@@ -24,4 +24,17 @@ describe('reducer', () => {
     const state: any = reducer(undefined, action);
     expect(state.form.inputs.input.value).toBe('abc');
   });
+
+  it('does not update state if value is unchanged', () => {
+    const action = changeValue({
+      formName: 'form',
+      name: 'input',
+      value: 'abc',
+    });
+
+    const firstState = reducer(undefined, action);
+    const secondState = reducer(firstState, action);
+
+    expect(firstState).toBe(secondState);
+  });
 });
