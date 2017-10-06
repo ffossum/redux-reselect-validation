@@ -19,13 +19,13 @@ type Params<Value> = {
   name: string,
   defaultValue?: Value,
   validators?: {
-    [key: string]: (Value) => boolean,
+    [key: string]: Value => boolean,
   },
 };
 
-type Params2<Value> = {
+type Params2 = {
   reduxValidators: {
-    [key: string]: Selector<State, any, Value>,
+    [key: string]: Selector<State, any, boolean>,
   },
 };
 type Result<Value> = {
@@ -35,10 +35,10 @@ type Result<Value> = {
   getErrors: State => { [string]: boolean },
   getValue: State => ?Value,
   isValid: State => boolean,
-  next: (Params2<Value>) => Result<Value>,
+  next: Params2 => Result<Value>,
 };
 function input<Value>(params: Params<Value>): Result<Value> {
-  const { formName, name, defaultValue, validators = {} } = params;
+  const { formName, name, defaultValue, validators = {},  } = params;
 
   function getValue(state: State) {
     const form = state.forms[formName];
@@ -66,7 +66,7 @@ function input<Value>(params: Params<Value>): Result<Value> {
     });
   }
 
-  function next(params2: Params2<Value>): Result<Value> {
+  function next(params2: Params2): Result<Value> {
     const { reduxValidators } = params2;
     validationSelectors = {
       ...validationSelectors,
