@@ -19,89 +19,72 @@ type Params<Value> = {
   name: string,
   defaultValue?: Value,
   validators?: {
-    [key: string]: Value => boolean,
+    [key: string]: (Value) => boolean,
+  },
+  reduxValidators?: {
+    [key: string]: Selector<State, any, boolean> | (State => boolean),
   },
 };
 
-type Params2 = {
-  reduxValidators: {
-    [key: string]: Selector<State, any, boolean>,
-  },
-};
-type Result<Value> = {
-  changeValue: Value => ChangeValueAction,
-  formName: string,
-  name: string,
-  getErrors: State => { [string]: boolean },
-  getValue: State => ?Value,
-  isValid: State => boolean,
-  next: Params2 => Result<Value>,
-};
-function input<Value>(params: Params<Value>): Result<Value> {
-  const { formName, name, defaultValue, validators = {},  } = params;
+class Input<Value> {
+  changeValue: Value => ChangeValueAction;
+  formName: string;
+  name: string;
+  getErrors: State => { [string]: boolean };
+  getValue: State => ?Value;
+  isValid: State => boolean;
+  validationSelectors: {
+    [key: string]: (State) => boolean,
+  };
+  next: ($Shape<Params<Value>>) => Input<Value>;
 
-  function getValue(state: State) {
-    const form = state.forms[formName];
-    const input = form && form.inputs && form.inputs[params.name];
-    const value = input && input.value;
-    return typeof value !== 'undefined' ? value : defaultValue;
-  }
-
-  let validationSelectors = mapValues(validators, v => {
-    return createSelector(getValue, v);
-  });
-
-  let getErrors = (state: State) =>
-    mapValues(validationSelectors, f => !f(state));
-
-  let isValid = createSelector(...values(validationSelectors), (...args) =>
-    every(args)
-  );
-
-  function changeValue(value: Value) {
-    return createChangeValueAction({
+  constructor(params: Params<Value>) {
+    const {
       formName,
       name,
-      value,
-    });
-  }
+      defaultValue,
+      validators = {},
+      reduxValidators = {},
+    } = params;
 
-  function next(params2: Params2): Result<Value> {
-    const { reduxValidators } = params2;
-    validationSelectors = {
-      ...validationSelectors,
+    this.formName = formName;
+    this.name = name;
+
+    this.getValue = function(state: State) {
+      const form = state.forms[formName];
+      const input = form && form.inputs && form.inputs[params.name];
+      const value = input && input.value;
+      return typeof value !== 'undefined' ? value : defaultValue;
+    };
+
+    this.validationSelectors = {
+      ...mapValues(validators, v => createSelector(this.getValue, v)),
       ...reduxValidators,
     };
 
-    getErrors = (state: State) =>
-      mapValues(validationSelectors, f => !f(state));
+    this.getErrors = (state: State) =>
+      mapValues(this.validationSelectors, f => !f(state));
 
-    isValid = createSelector(...values(validationSelectors), (...args) =>
-      every(args)
+    this.isValid = createSelector(
+      ...values(this.validationSelectors),
+      (...args) => every(args)
     );
 
-    return {
-      changeValue,
-      formName,
-      name,
-      getErrors,
-      getValue,
-      isValid,
-      validationSelectors,
-      next,
+    this.changeValue = function(value: Value) {
+      return createChangeValueAction({
+        formName,
+        name,
+        value,
+      });
+    };
+
+    this.next = function(nextParams: $Shape<Params<Value>>): Input<Value> {
+      return new Input({
+        ...params,
+        ...nextParams,
+      });
     };
   }
-
-  return {
-    changeValue,
-    formName,
-    name,
-    getErrors,
-    getValue,
-    isValid,
-    validationSelectors,
-    next,
-  };
 }
 
-export { input, reducer, createChangeValueAction as changeValue, CHANGE_VALUE };
+export { Input, reducer, createChangeValueAction as changeValue, CHANGE_VALUE };

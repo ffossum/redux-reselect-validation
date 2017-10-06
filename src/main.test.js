@@ -1,7 +1,7 @@
 /* @flow */
 /* eslint-env jest */
 
-import { input } from './main';
+import { Input } from './main';
 import formsReducer from './reducer';
 import { combineReducers } from 'redux';
 import { createSelector } from 'reselect';
@@ -19,7 +19,7 @@ describe('input', () => {
   });
 
   it('includes its name', () => {
-    const result = input({
+    const result = new Input({
       formName,
       name,
     });
@@ -27,7 +27,7 @@ describe('input', () => {
   });
 
   it('includes its form name', () => {
-    const result = input({
+    const result = new Input({
       formName,
       name,
     });
@@ -35,18 +35,22 @@ describe('input', () => {
   });
 
   it('provides selector for input value', () => {
-    const result = input({ name, formName });
+    const result = new Input({ name, formName });
     state = reducer(state, result.changeValue('abc'));
     expect(result.getValue(state)).toBe('abc');
   });
 
   test('default value', () => {
-    const result = input({ name, formName, defaultValue: 'default value' });
+    const result = new Input({
+      name,
+      formName,
+      defaultValue: 'default value',
+    });
     expect(result.getValue(state)).toBe('default value');
   });
 
   test('simple validator', () => {
-    const result = input({
+    const result = new Input({
       name,
       formName,
       validators: {
@@ -59,11 +63,12 @@ describe('input', () => {
   });
 
   test('advanced validator', () => {
-    const input1 = input({
+    const input1: Input<number> = new Input({
       name: 'input1',
       formName,
     });
-    let input2 = input({
+
+    let input2: Input<number> = new Input({
       name: 'input2',
       formName,
     });
