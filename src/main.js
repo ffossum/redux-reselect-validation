@@ -14,7 +14,7 @@ type State = {
   forms: FormsState,
 };
 
-type Params<Value> = {
+type Params<Value, Parsed = Value> = {
   formName: string,
   name: string,
   defaultValue?: Value,
@@ -24,27 +24,31 @@ type Params<Value> = {
   reduxValidators?: {
     [key: string]: Selector<State, any, boolean> | (State => boolean),
   },
+  parse?: Value => Parsed,
 };
 
-class Input<Value> {
+const id = a => a;
+class Input<Value, Parsed = Value> {
   changeValue: Value => ChangeValueAction;
   formName: string;
   name: string;
   getErrors: State => { [string]: boolean };
   getValue: State => ?Value;
+  getParsed: State => Parsed;
   isValid: State => boolean;
   validationSelectors: {
     [key: string]: (State) => boolean,
   };
-  next: ($Shape<Params<Value>>) => Input<Value>;
+  next: ($Shape<Params<Value, Parsed>>) => Input<Value, Parsed>;
 
-  constructor(params: Params<Value>) {
+  constructor(params: Params<Value, Parsed>) {
     const {
       formName,
       name,
       defaultValue,
       validators = {},
       reduxValidators = {},
+      parse = id,
     } = params;
 
     this.formName = formName;
@@ -55,6 +59,11 @@ class Input<Value> {
       const input = form && form.inputs && form.inputs[params.name];
       const value = input && input.value;
       return typeof value !== 'undefined' ? value : defaultValue;
+    };
+
+    this.getParsed = function(state: State) {
+      const value = this.getValue(state);
+      return parse(value);
     };
 
     this.validationSelectors = {
@@ -78,7 +87,9 @@ class Input<Value> {
       });
     };
 
-    this.next = function(nextParams: $Shape<Params<Value>>): Input<Value> {
+    this.next = function(
+      nextParams: $Shape<Params<Value, Parsed>>
+    ): Input<Value, Parsed> {
       return new Input({
         ...params,
         ...nextParams,

@@ -92,4 +92,16 @@ describe('input', () => {
 
     expect(input2.isValid(state)).toBe(false);
   });
+
+  test('parse', () => {
+    const input: Input<string, number> = new Input({
+      name: 'input',
+      formName,
+      parse: parseInt,
+    });
+
+    state = reducer(state, input.changeValue('100'));
+
+    expect(input.getParsed(state)).toBe(100);
+  });
 });
