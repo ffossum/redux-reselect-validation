@@ -62,7 +62,41 @@ describe('input', () => {
     expect(result.isValid(state)).toBe(true);
   });
 
-  test('advanced validator', () => {
+  describe('getErrors', () => {
+    it('returns object indicating failed validations', () => {
+      const input: Input<number> = new Input({
+        name,
+        formName,
+        validators: {
+          a: x => x < 2,
+          b: x => x < 4,
+        },
+      });
+
+      state = reducer(state, input.changeValue(1));
+
+      expect(input.getErrors(state)).toEqual({
+        a: false,
+        b: false,
+      });
+
+      state = reducer(state, input.changeValue(3));
+
+      expect(input.getErrors(state)).toEqual({
+        a: true,
+        b: false,
+      });
+
+      state = reducer(state, input.changeValue(5));
+
+      expect(input.getErrors(state)).toEqual({
+        a: true,
+        b: true,
+      });
+    });
+  });
+
+  test('redux validator', () => {
     const input1: Input<number> = new Input({
       name: 'input1',
       formName,
@@ -95,7 +129,7 @@ describe('input', () => {
 
   test('parse', () => {
     const input: Input<string, number> = new Input({
-      name: 'input',
+      name,
       formName,
       parse: parseInt,
     });
