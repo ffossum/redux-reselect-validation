@@ -15,6 +15,7 @@ type State = {
 };
 
 type Params<Value, Parsed = Value> = {
+  stateToForms?: State => FormsState,
   formName: string,
   name: string,
   defaultValue?: Value,
@@ -27,7 +28,11 @@ type Params<Value, Parsed = Value> = {
   parse?: Value => Parsed,
 };
 
-const id = a => a;
+function id(a) {
+  return a;
+}
+const defaultStateToForms = state => state.forms;
+
 class Input<Value, Parsed = Value> {
   changeValue: Value => ChangeValueAction;
   formName: string;
@@ -43,6 +48,7 @@ class Input<Value, Parsed = Value> {
 
   constructor(params: Params<Value, Parsed>) {
     const {
+      stateToForms = defaultStateToForms,
       formName,
       name,
       defaultValue,
@@ -54,17 +60,16 @@ class Input<Value, Parsed = Value> {
     this.formName = formName;
     this.name = name;
 
-    this.getValue = function(state: State) {
-      const form = state.forms[formName];
+    this.getValue = createSelector(stateToForms, forms => {
+      const form = forms[formName];
       const input = form && form.inputs && form.inputs[params.name];
       const value = input && input.value;
       return typeof value !== 'undefined' ? value : defaultValue;
-    };
+    });
 
-    this.getParsed = function(state: State) {
-      const value = this.getValue(state);
-      return parse(value);
-    };
+    this.getParsed = parse
+      ? createSelector((this.getValue: any), parse)
+      : (this.getValue: any);
 
     this.validationSelectors = {
       ...mapValues(validators, v => createSelector(this.getValue, v)),
