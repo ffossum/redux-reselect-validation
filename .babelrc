@@ -9,7 +9,7 @@
       ]
     },
     "development": {
-      "plugins": [ "lodash" ],
+      "plugins": [ "lodash", "external-helpers" ],
       "presets": [
         ["env", { "modules": false }],
         "flow",
