@@ -19,47 +19,47 @@ describe('input', () => {
   });
 
   it('includes its name', () => {
-    const result = new Input({
+    const input = new Input({
       formName,
       name,
     });
-    expect(result.name).toBe(name);
+    expect(input.name).toBe(name);
   });
 
   it('includes its form name', () => {
-    const result = new Input({
+    const input = new Input({
       formName,
       name,
     });
-    expect(result.formName).toBe(formName);
+    expect(input.formName).toBe(formName);
   });
 
   it('provides selector for input value', () => {
-    const result = new Input({ name, formName });
-    state = reducer(state, result.changeValue('abc'));
-    expect(result.getValue(state)).toBe('abc');
+    const input = new Input({ name, formName });
+    state = reducer(state, input.changeValue('abc'));
+    expect(input.getValue(state)).toBe('abc');
   });
 
   test('default value', () => {
-    const result = new Input({
+    const input = new Input({
       name,
       formName,
       defaultValue: 'default value',
     });
-    expect(result.getValue(state)).toBe('default value');
+    expect(input.getValue(state)).toBe('default value');
   });
 
   test('simple validator', () => {
-    const result = new Input({
+    const input = new Input({
       name,
       formName,
       validators: {
         simple: value => value === 'abc',
       },
     });
-    expect(result.isValid(state)).toBe(false);
-    state = reducer(state, result.changeValue('abc'));
-    expect(result.isValid(state)).toBe(true);
+    expect(input.isValid(state)).toBe(false);
+    state = reducer(state, input.changeValue('abc'));
+    expect(input.isValid(state)).toBe(true);
   });
 
   describe('getErrors', () => {
