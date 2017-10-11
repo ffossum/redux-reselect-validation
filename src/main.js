@@ -28,9 +28,6 @@ type Params<Value, Parsed = Value> = {
   parse?: Value => Parsed,
 };
 
-function id(a) {
-  return a;
-}
 const defaultStateToForms = state => state.forms;
 
 class Input<Value, Parsed = Value> {
@@ -54,7 +51,7 @@ class Input<Value, Parsed = Value> {
       defaultValue,
       validators = {},
       reduxValidators = {},
-      parse = id,
+      parse,
     } = params;
 
     this.formName = formName;
