@@ -8,7 +8,7 @@ import {
 import type { ChangeValueAction } from './actions';
 import { createSelector } from 'reselect';
 import type { Selector } from 'reselect';
-import { mapValues, values, every } from 'lodash';
+import { mapValues, every, values } from './util';
 
 type State = {
   forms: FormsState,
@@ -40,7 +40,7 @@ class Input<Value, Parsed = Value> {
   getErrors: State => { [string]: boolean };
   getValue: State => ?Value;
   getParsed: State => Parsed;
-  isValid: State => boolean;
+  isValid: Selector<State, *, boolean>;
   validationSelectors: {
     [key: string]: (State) => boolean,
   };
