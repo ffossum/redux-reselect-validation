@@ -1,7 +1,6 @@
 {
   "env": {
     "test": {
-      "plugins": [ "lodash" ],
       "presets": [
         "env",
         "flow",
@@ -9,7 +8,7 @@
       ]
     },
     "development": {
-      "plugins": [ "lodash", "external-helpers" ],
+      "plugins": [ "external-helpers" ],
       "presets": [
         ["env", { "modules": false }],
         "flow",

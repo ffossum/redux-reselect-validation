@@ -5,16 +5,13 @@
   "main": "dist/redux-reselect-validation.cjs.js",
   "module": "dist/redux-reselect-validation.esm.js",
   "browser": "dist/redux-reselect-validation.umd.js",
-  "dependencies": {
-    "lodash": "^4.17.4"
-  },
+  "dependencies": {},
   "devDependencies": {
     "ajv": "^5.2.2",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.0",
     "babel-helpers": "^6.24.1",
     "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-lodash": "^3.2.11",
     "babel-preset-env": "^1.6.0",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-stage-3": "^6.24.1",
