@@ -1,6 +1,7 @@
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
+import { list as babelHelpersList } from 'babel-helpers'
 
 import pkg from './package.json';
 
@@ -22,11 +23,13 @@ export default [
 		name: 'ReduxInputValidation',
 		plugins: [
 			babel({
-				exclude: 'node_modules/**'
+				exclude: 'node_modules/**',
+				// fixing temporary rollup's regression, remove when rollup/rollup#1595 gets solved
+				externalHelpersWhitelist: babelHelpersList.filter(helperName => helperName !== 'asyncGenerator'),
 			}),
 			resolve(),
 			commonjs()
-		]
+		],
 	},
 
 	{
@@ -38,8 +41,10 @@ export default [
 		external,
 		plugins: [
 			babel({
-				exclude: 'node_modules/**'
+				exclude: 'node_modules/**',
+				// fixing temporary rollup's regression, remove when rollup/rollup#1595 gets solved
+				externalHelpersWhitelist: babelHelpersList.filter(helperName => helperName !== 'asyncGenerator'),
 			})
-		]
+		],
 	}
 ];
