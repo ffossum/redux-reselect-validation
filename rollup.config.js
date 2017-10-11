@@ -20,7 +20,7 @@ export default [
 			file: pkg.browser,
 			format: 'umd'
 		}],
-		name: 'ReduxInputValidation',
+		name: 'ReduxReselectValidation',
 		plugins: [
 			babel({
 				exclude: 'node_modules/**',

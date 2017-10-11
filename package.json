@@ -1,6 +1,6 @@
 {
   "name": "redux-reselect-validation",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "main": "dist/redux-reselect-validation.cjs.js",
   "module": "dist/redux-reselect-validation.esm.js",
