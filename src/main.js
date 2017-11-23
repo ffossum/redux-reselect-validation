@@ -10,9 +10,7 @@ import { createSelector } from 'reselect';
 import type { Selector } from 'reselect';
 import { mapValues, every, values } from './util';
 
-type State = {
-  forms: FormsState,
-};
+type State = Object;
 
 type Params<Value, Parsed = Value> = {
   stateToForms?: State => FormsState,
@@ -58,7 +56,7 @@ class Input<Value, Parsed = Value> {
     this.name = name;
 
     this.getValue = createSelector(stateToForms, forms => {
-      const form = forms[formName];
+      const form = forms && forms[formName];
       const input = form && form.inputs && form.inputs[params.name];
       const value = input && input.value;
       return typeof value !== 'undefined' ? value : defaultValue;

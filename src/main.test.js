@@ -6,6 +6,8 @@ import formsReducer from './reducer';
 import { combineReducers } from 'redux';
 import { createSelector } from 'reselect';
 
+import type { FormsState } from './reducer';
+
 describe('input', () => {
   let reducer;
   let formName = 'formName';
@@ -137,5 +139,34 @@ describe('input', () => {
     state = reducer(state, input.changeValue('100'));
 
     expect(input.getParsed(state)).toBe(100);
+  });
+
+  test('custom stateToForms', () => {
+    const stateToForms = state => state.myForms;
+
+    const state: { myForms: FormsState } = {
+      myForms: {
+        [formName]: {
+          inputs: {
+            [name]: {
+              value: 'my value',
+            },
+          },
+        },
+      },
+    };
+
+    const brokenInput = new Input({
+      name,
+      formName,
+    });
+    const fixedInput = new Input({
+      name,
+      formName,
+      stateToForms,
+    });
+
+    expect(brokenInput.getValue(state)).toBeUndefined();
+    expect(fixedInput.getValue(state)).toEqual('my value');
   });
 });
