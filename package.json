@@ -19,7 +19,7 @@
     "eslint-plugin-flowtype": "^2.36.0",
     "flow-bin": "^0.59.0",
     "jest": "^21.1.0",
-    "prettier": "^1.7.0",
+    "prettier": "^1.8.2",
     "redux": "^3.7.2",
     "reselect": "^3.0.1",
     "rollup": "^0.50.0",
